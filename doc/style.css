@@ -1,0 +1,59 @@
+/* General page style. The scroll bar colours only visible in IE5.5+ */
+body {
+	background-color: #FFFFFF;
+	font-family: Verdana, Arial, Helvetica, Sans-Serif;
+}
+
+table.color {
+    width: 80%;
+    margin-left: 10%;
+	border : none; border-width: 1px 1px 1px 1px;
+}
+
+table.plain {
+    width: 100%;
+	border : none; border-width: 1px 1px 1px 1px;
+}
+
+pre {
+    margin-left: 10%;
+}
+
+table.color th {
+	background-color: #8080FF;
+	padding: 4px;
+    border-width: 1px;
+    border-style: none;
+}
+	
+table.color td {
+	background-color: #C0C0FF;
+	padding: 4px;
+    border-width: 1px;
+    border-style: none;
+}	
+
+table.plain th {
+	background-color: #white;
+	padding: 4px;
+    border-width: 1px;
+    border-style: none;
+}
+	
+table.plain td {
+	background-color: #white;
+	padding: 4px;
+    border-width: 1px;
+    border-style: none;
+}	
+
+li {
+    padding: 0.25em;
+}
+
+hr {
+    border:0;
+    height: 1px;
+    color: #808080;
+    background-color: #808080;
+   }

@@ -1,0 +1,8 @@
+The device database is distributed with Antenna is the J2ME Polish devices database and it's distributed under GPL.
+The files included in the device database are:
+capabilities.xml
+devices.xml
+groups.xml
+
+The files are distributed with permission from Enough Software and the viral nature of GPL does not effect Antenna itself.
+if you are interested in distributing the device database as a part of your application, it will be subjected to the GPL license and not to LGPL.

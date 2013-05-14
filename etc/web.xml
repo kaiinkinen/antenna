@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+    <!-- Define the servlet and the class its implemented in. Required. -->
+    
+    <servlet>
+        <servlet-name>antenna</servlet-name>
+        <servlet-class>de.pleumann.antenna.http.OTAServer</servlet-class>
+
+	    <!-- Set the directory where MIDlets are stored.
+	         Optional. Defaults to WEB-INF/files -->
+	
+		<!--
+	
+		<init-param>
+			<param-name>files</param-name>
+			<param-value>d:/temp/midlets</param-value>
+		</init-param>
+	
+		-->
+	
+	    <!-- Set the login and password for uploading. Optional.
+	         No authentication is required by default. -->
+	
+	    <!--
+	
+		<init-param>
+			<param-name>login</param-name>
+			<param-value>admin</param-value>
+		</init-param>
+	
+		<init-param>
+			<param-name>password</param-name>
+			<param-value>admin</param-value>
+		</init-param>
+	
+		-->
+
+    </servlet>
+
+    <!-- Set the URL pattern that the Antenna servlet is handling. Required. -->
+
+    <servlet-mapping>
+        <servlet-name>antenna</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+    
+</web-app>

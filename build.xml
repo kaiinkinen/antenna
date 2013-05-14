@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+
+<project name="preprocessor" default="all" basedir=".">
+
+	<property name="pp.name" value="preprocessor" />
+	<property name="pp_classes" value="dist/classes" />
+	<property name="pp_v2.classes" value="dist/classes/v2" />
+	<property name="pp_v3.classes" value="dist/classes/v3" />
+	<property name="pp.version" value="1.2" />
+
+	<property name="cp_v2" value="lib/antlr-2.7.7.jar" />
+	<property name="cp_v3" value="lib/stringtemplate-3.1b1.jar;lib/antlr-3.0.1.jar;lib/antlr-runtime-3.0.1.jar" />
+
+	<target name="all" depends="clean,compile,package_all" />
+		
+	<target name="compile" depends="compile_v2,compile_v3">
+	</target>
+
+	<target name="compile_v2" depends="rebuild_pp_v2">
+		<mkdir dir="${pp_v2.classes}" />
+		<javac srcdir="src" debug="true" destdir="${pp_v2.classes}" classpath="${cp_v2}" source="1.4" target="1.4" includes="antenna/preprocessor/v2/**" />
+	</target>
+
+	<target name="compile_v3" depends="rebuild_pp_v3">
+		<mkdir dir="${pp_v3.classes}" />
+		<javac srcdir="src" debug="true" destdir="${pp_v3.classes}" classpath="${cp_v3}" source="1.4" target="1.4" includes="antenna/preprocessor/v3/**" />
+	</target>
+
+
+	<target name="package_all" depends="package_v2,package_v3">
+
+		<jar jarfile="dist/${pp.name}-bin-${pp.version}.jar">
+			<fileset dir="${pp_v3.classes}">
+				<include name="**/*.class" />
+			</fileset>
+			<fileset dir="${pp_v2.classes}">
+				<include name="**/*.class" />
+			</fileset>
+
+			<zipgroupfileset dir="." includes="lib/antlr-2.7.7.jar" />
+			<zipgroupfileset dir="." includes="lib/antlr-runtime-3.0.1.jar" />
+		</jar>
+
+		<zip zipfile="dist/${pp.name}-src-${pp.version}.zip">
+			<fileset dir=".">
+				<include name="src/antenna/preprocessor/v2/**/*.java" />
+				<include name="src/antenna/preprocessor/v2/**/*.g" />
+				<include name="src/antenna/preprocessor/v3/**/*.java" />
+				<include name="src/antenna/preprocessor/v3/**/*.g" />
+				
+				<include name="lib/antlr-2.7.7.jar" />
+				<!-- 
+				<include name="lib/stringtemplate-3.1b1.jar" />
+				<include name="lib/antlr-3.0.1.jar" />
+					-->
+				<include name="lib/antlr-runtime-3.0.1.jar" />
+				<include name="LICENSE" />
+				<include name="LICENSE-EPL" />
+				<include name="LICENSE-LGPL" />
+				<include name="build.xml" />
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="package_v2">
+		<mkdir dir="dist" />
+		<jar jarfile="dist/${pp.name}-v2-bin-${pp.version}.jar">
+			<fileset dir="${pp_v2.classes}">
+				<include name="**/*.class" />
+			</fileset>
+			<zipgroupfileset dir="." includes="${cp_v2}" />
+		</jar>
+
+		<zip zipfile="dist/${pp.name}-v2-src-${pp.version}.zip">
+			<fileset dir=".">
+				<include name="src/antenna/preprocessor/v2/**/*.java" />
+				<include name="src/antenna/preprocessor/v2/**/*.g" />
+				<include name="lib/antlr-2.7.7.jar" />
+				<include name="LICENSE" />
+				<include name="LICENSE-EPL" />
+				<include name="LICENSE-LGPL" />
+				<include name="build.xml" />
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="package_v3">
+
+		<mkdir dir="dist" />
+		<jar jarfile="dist/${pp.name}-v3-bin-${pp.version}.jar">
+			<fileset dir="${pp_v3.classes}">
+				<include name="**/*.class" />
+			</fileset>
+			<zipgroupfileset dir="." includes="lib/stringtemplate-3.1b1.jar lib/antlr-3.0.1.jar lib/antlr-runtime-3.0.1.jar" />
+		</jar>
+
+		<zip zipfile="dist/${pp.name}-v3-src-${pp.version}.zip">
+			<fileset dir=".">
+				<include name="src/antenna/preprocessor/v3/**/*.java" />
+				<include name="src/antenna/preprocessor/v3/**/*.g" />
+				<include name="lib/stringtemplate-3.1b1.jar" />
+				<include name="lib/antlr-3.0.1.jar" />
+				<include name="lib/antlr-runtime-3.0.1.jar" />
+				<include name="LICENSE" />
+				<include name="LICENSE-EPL" />
+				<include name="LICENSE-LGPL" />
+				<include name="build.xml" />
+			</fileset>
+		</zip>
+	</target>
+
+
+
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: rebuild_pp
+         - - - - - - - - - - - - - - - - - -->
+	<target name="rebuild_pp_v2">
+		<antlr target="src/antenna/preprocessor/v2/parser/APP.g">
+			<classpath>
+				<fileset dir="lib/" includes="antlr.jar" />
+			</classpath>
+		</antlr>
+	</target>
+
+	<target name="rebuild_pp_v3">
+		<java classname="org.antlr.Tool">
+			<classpath path="${cp_v3};${cp_v2}" />
+			<arg value="src/antenna/preprocessor/v3/parser/APP.g" />
+		</java>
+	</target>
+	
+	<target name="clean">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="dist" includes="**/*" />
+		</delete>
+
+		<delete dir="${pp.classes}" failonerror="false" />
+		<delete file="dist/${pp.name}-bin-${pp.version}.jar" failonerror="false" />
+		<delete file="dist/${pp.name}-src-${.version}.zip" failonerror="false" />
+	</target>
+	
+</project>
