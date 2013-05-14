@@ -8,8 +8,24 @@
 	<property name="pp_v3.classes" value="dist/classes/v3" />
 	<property name="pp.version" value="1.2" />
 
-	<property name="cp_v2" value="lib/antlr-2.7.7.jar" />
-	<property name="cp_v3" value="lib/stringtemplate-3.1b1.jar;lib/antlr-3.0.1.jar;lib/antlr-runtime-3.0.1.jar" />
+        <fileset id="classpath.version2.files" dir="lib">
+          <include name="antlr-2.7.7.jar" />
+          <include name="ant-1.8.4.jar" />
+        </fileset>
+        <path id="classpath.version2">
+          <fileset refid="classpath.version2.files" />
+        </path>
+
+        <fileset id="classpath.version3.files" dir="lib">
+          <include name="stringtemplate-3.1-b1.jar" />
+          <include name="antlr-3.0.1.jar" />
+          <include name="antlr-runtime-3.0.1.jar" />
+        </fileset>
+        
+        <path id="classpath.version3">
+          <fileset refid="classpath.version3.files" />
+          <path refid="classpath.version2" />
+        </path>
 
 	<target name="all" depends="clean,compile,package_all" />
 		
@@ -18,12 +34,12 @@
 
 	<target name="compile_v2" depends="rebuild_pp_v2">
 		<mkdir dir="${pp_v2.classes}" />
-		<javac srcdir="src" debug="true" destdir="${pp_v2.classes}" classpath="${cp_v2}" source="1.4" target="1.4" includes="antenna/preprocessor/v2/**" />
+		<javac srcdir="src" includeantruntime="false" debug="true" destdir="${pp_v2.classes}" classpathref="classpath.version2" source="1.4" target="1.4" includes="antenna/preprocessor/v2/**" />
 	</target>
 
 	<target name="compile_v3" depends="rebuild_pp_v3">
 		<mkdir dir="${pp_v3.classes}" />
-		<javac srcdir="src" debug="true" destdir="${pp_v3.classes}" classpath="${cp_v3}" source="1.4" target="1.4" includes="antenna/preprocessor/v3/**" />
+		<javac srcdir="src" includeantruntime="false" debug="true" destdir="${pp_v3.classes}" classpathref="classpath.version3" source="1.4" target="1.4" includes="antenna/preprocessor/v3/**" />
 	</target>
 
 
@@ -49,10 +65,6 @@
 				<include name="src/antenna/preprocessor/v3/**/*.g" />
 				
 				<include name="lib/antlr-2.7.7.jar" />
-				<!-- 
-				<include name="lib/stringtemplate-3.1b1.jar" />
-				<include name="lib/antlr-3.0.1.jar" />
-					-->
 				<include name="lib/antlr-runtime-3.0.1.jar" />
 				<include name="LICENSE" />
 				<include name="LICENSE-EPL" />
@@ -68,7 +80,9 @@
 			<fileset dir="${pp_v2.classes}">
 				<include name="**/*.class" />
 			</fileset>
-			<zipgroupfileset dir="." includes="${cp_v2}" />
+			<zipgroupfileset dir="lib">
+                          <include name="antlr-2.7.7.jar" />
+                        </zipgroupfileset>
 		</jar>
 
 		<zip zipfile="dist/${pp.name}-v2-src-${pp.version}.zip">
@@ -91,14 +105,18 @@
 			<fileset dir="${pp_v3.classes}">
 				<include name="**/*.class" />
 			</fileset>
-			<zipgroupfileset dir="." includes="lib/stringtemplate-3.1b1.jar lib/antlr-3.0.1.jar lib/antlr-runtime-3.0.1.jar" />
+			<zipgroupfileset dir="lib">
+                           <include name="stringtemplate-3.1-b1.jar" />
+                           <include name="antlr-3.0.1.jar"/>
+                           <include name="antlr-runtime-3.0.1.jar" />
+                        </zipgroupfileset>
 		</jar>
 
 		<zip zipfile="dist/${pp.name}-v3-src-${pp.version}.zip">
 			<fileset dir=".">
 				<include name="src/antenna/preprocessor/v3/**/*.java" />
 				<include name="src/antenna/preprocessor/v3/**/*.g" />
-				<include name="lib/stringtemplate-3.1b1.jar" />
+				<include name="lib/stringtemplate-3.1-b1.jar" />
 				<include name="lib/antlr-3.0.1.jar" />
 				<include name="lib/antlr-runtime-3.0.1.jar" />
 				<include name="LICENSE" />
@@ -116,15 +134,13 @@
          - - - - - - - - - - - - - - - - - -->
 	<target name="rebuild_pp_v2">
 		<antlr target="src/antenna/preprocessor/v2/parser/APP.g">
-			<classpath>
-				<fileset dir="lib/" includes="antlr.jar" />
-			</classpath>
+			<classpath refid="classpath.version2" />
 		</antlr>
 	</target>
 
 	<target name="rebuild_pp_v3">
 		<java classname="org.antlr.Tool">
-			<classpath path="${cp_v3};${cp_v2}" />
+			<classpath refid="classpath.version3" />
 			<arg value="src/antenna/preprocessor/v3/parser/APP.g" />
 		</java>
 	</target>
